@@ -1,0 +1,47 @@
+.icon {
+    display: inline-block;
+    background: transparent no-repeat center;
+    background-size: contain;
+    width: 1em;
+    height: 1em;
+    font-size: inherit;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+$iconBackgroundColors: (
+        'pink': #FF238D,
+        'blue': #0066FF,
+        'gray': #8E9CBB
+);
+
+$baseIconPath: '@/assets/icons';
+
+@mixin icon-mapper($iconNames) {
+    @each $name in $iconNames {
+        $iconPath: '#{$baseIconPath}/#{$name}.svg';
+
+        &-#{$name} {
+            background-image: url($iconPath);
+        }
+
+        @each $colorName, $colorValue in $iconBackgroundColors {
+            &-#{$name}.icon_color_#{$colorName} {
+                background-color: $colorValue;
+                background-image: none;
+                -webkit-mask-position: center;
+                mask-position: center;
+                -webkit-mask-repeat: no-repeat;
+                mask-repeat: no-repeat;
+                -webkit-mask-image: url($iconPath);
+                mask-image: url($iconPath);
+            }
+        }
+    }
+}
+
+$icons: delete, edit, mark, move, plus, search, close, arrow-up, arrow-down, accept;
+
+.icon {
+    @include icon-mapper($icons);
+}
