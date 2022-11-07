@@ -14,9 +14,9 @@
                 :draggable="draggable"
                 @on-drag-start="onDragStart"
                 @on-drag-end="onDragEnd"
-                @on-add="onAdd"
+                @on-move="onMoveDocument"
                 @on-drag="draggable=true"
-                @off-drag="draggable=isDragging || false"
+                @off-drag="draggable=isDragging"
                 @delete-category="id => $emit('delete-category', id)"
                 @delete-document="id => $emit('delete-document', id)" />
     </draggable>
@@ -27,7 +27,8 @@
                  :disabled="!draggable"
                  @start="onDragStart"
                  @end="onDragEnd"
-                 @add="onAdd"
+                 @add="onMoveDocument"
+                 @update="onMoveDocument"
                  :value="parentlessDocs"
                  :removeCloneOnHide="false">
         <Document v-for="document in parentlessDocs"
@@ -37,7 +38,7 @@
                   :data-document-id="document.id"
                   :searchText="searchText"
                   @on-drag="draggable=true"
-                  @off-drag="draggable=isDragging || false"
+                  @off-drag="draggable=isDragging"
                   @delete="$emit('delete-document', document.id)" />
       </draggable>
     </div>
@@ -93,7 +94,7 @@ export default {
       this.isDragging = false;
       this.draggable = false;
     },
-    onAdd(evt) {
+    onMoveDocument(evt) {
       const documentId = parseInt(evt.item.getAttribute('data-document-id'));
       const to = {
         categoryId: parseInt(evt.to.getAttribute('data-category-id')) || null,

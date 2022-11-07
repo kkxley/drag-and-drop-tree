@@ -91,12 +91,17 @@ export default {
       const documentIndex = this.documents.findIndex(document => document.id === documentId);
       const document = {...this.documents[documentIndex], parentId: to.categoryId};
       const documents = [...this.documents.slice(0, documentIndex), ...this.documents.slice(documentIndex + 1)];
-      const newIndex = documents.reduce((newIndex, document) => {
-        if (document.parentId === to.categoryId && newIndex < to.index) {
-          newIndex += 1;
+
+      let newIndex = 0, localIndex = 0;
+      for (const document of documents) {
+        if (localIndex === to.index) {
+          break;
         }
-        return newIndex;
-      }, 0);
+        if (document.parentId === to.categoryId) {
+          localIndex++;
+        }
+        newIndex++;
+      }
 
       this.documents = [...documents.slice(0, newIndex), {...document}, ...documents.slice(newIndex)]
     },

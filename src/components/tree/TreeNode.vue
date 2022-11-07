@@ -17,7 +17,7 @@
                  @start="$emit('on-drag-start', $event)"
                  @end="$emit('on-drag-end', $event)"
                  @add="beforeAdd"
-                 @update="isOpen = true"
+                 @update="$emit('on-move', $event)"
                  :data-category-id="category.id"
                  :removeCloneOnHide="false">
         <template v-if="isOpen">
@@ -66,7 +66,7 @@ export default {
   methods: {
     beforeAdd(evt) {
       this.isOpen = true;
-      this.$emit('on-add', evt);
+      this.$emit('on-move', evt);
     }
   },
   watch: {
