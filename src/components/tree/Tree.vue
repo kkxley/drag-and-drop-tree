@@ -5,7 +5,7 @@
                dragClass="tree-node_drag"
                @start="onDragStart"
                @end="onDragEnd"
-               :disabled="!draggable"
+               :disabled="!draggable && !isDragging"
                :removeCloneOnHide="false">
       <TreeNode v-for="category in tree"
                 :key="category.id"
@@ -24,7 +24,7 @@
       <draggable group="documents"
                  ghostClass="document_ghost"
                  dragClass="document_drag"
-                 :disabled="!draggable || !isDragging"
+                 :disabled="!draggable && !isDragging"
                  @start="onDragStart"
                  @end="onDragEnd"
                  @add="onMoveDocument"
