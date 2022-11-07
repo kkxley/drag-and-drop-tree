@@ -69,22 +69,11 @@ export default {
   },
   data() {
     return {
-      tree: this.getTree(),
-      parentlessDocs: this.getParentlessDocs(),
       draggable: false,
       isDragging: false
     };
   },
   methods: {
-    getTree() {
-      return this.categories.map(category => {
-        const documents = this.documents.filter(document => document.parentId === category.id);
-        return {...category, isOpen: false, documents}
-      })
-    },
-    getParentlessDocs() {
-      return this.documents.filter(document => document.parentId === null);
-    },
     onDragStart(evt) {
       this.isDragging = true;
       evt.clone.style.display = "flex";
@@ -102,14 +91,15 @@ export default {
       this.$emit('move-document', documentId, to);
     }
   },
-  watch: {
-    categories() {
-      this.tree = this.getTree();
-      this.parentlessDocs = this.getParentlessDocs();
+  computed: {
+    tree() {
+      return this.categories.map(category => {
+        const documents = this.documents.filter(document => document.parentId === category.id);
+        return {...category, isOpen: false, documents}
+      })
     },
-    documents() {
-      this.tree = this.getTree();
-      this.parentlessDocs = this.getParentlessDocs();
+    parentlessDocs() {
+      return this.documents.filter(document => document.parentId === null);
     }
   }
 }
