@@ -3,9 +3,8 @@
     <draggable group="categories"
                ghostClass="tree-node_ghost"
                dragClass="tree-node_drag"
-               @start="onStart"
-               @end="onEnd"
-               @add="onAdd"
+               @start="onDragStart"
+               @end="onDragEnd"
                :disabled="!draggable"
                :removeCloneOnHide="false">
       <TreeNode v-for="category in tree"
@@ -13,8 +12,8 @@
                 :category="category"
                 :searchText="searchText"
                 :draggable="draggable"
-                @on-drag-start="onStart"
-                @on-drag-end="onEnd"
+                @on-drag-start="onDragStart"
+                @on-drag-end="onDragEnd"
                 @on-add="onAdd"
                 @on-drag="draggable=true"
                 @off-drag="draggable=isDragging || false"
@@ -26,8 +25,8 @@
                  ghostClass="document_ghost"
                  dragClass="document_drag"
                  :disabled="!draggable"
-                 @start="onStart"
-                 @end="onEnd"
+                 @start="onDragStart"
+                 @end="onDragEnd"
                  @add="onAdd"
                  :value="parentlessDocs"
                  :removeCloneOnHide="false">
@@ -85,12 +84,12 @@ export default {
     getParentlessDocs() {
       return this.documents.filter(document => document.parentId === null);
     },
-    onStart(evt) {
+    onDragStart(evt) {
       this.isDragging = true;
       evt.clone.style.display = "flex";
       evt.clone.style.opacity = "0.2";
     },
-    onEnd() {
+    onDragEnd() {
       this.isDragging = false;
       this.draggable = false;
     },
