@@ -11,12 +11,12 @@
                 :key="category.id"
                 :category="category"
                 :searchText="searchText"
-                :draggable="draggable"
+                :draggable="draggable || isDragging"
                 @on-drag-start="onDragStart"
                 @on-drag-end="onDragEnd"
                 @on-move="onMoveDocument"
                 @on-drag="draggable=true"
-                @off-drag="draggable=isDragging"
+                @off-drag="draggable=false"
                 @delete-category="id => $emit('delete-category', id)"
                 @delete-document="id => $emit('delete-document', id)" />
     </draggable>
@@ -24,7 +24,7 @@
       <draggable group="documents"
                  ghostClass="document_ghost"
                  dragClass="document_drag"
-                 :disabled="!draggable"
+                 :disabled="!draggable || !isDragging"
                  @start="onDragStart"
                  @end="onDragEnd"
                  @add="onMoveDocument"
@@ -38,7 +38,7 @@
                   :data-document-id="document.id"
                   :searchText="searchText"
                   @on-drag="draggable=true"
-                  @off-drag="draggable=isDragging"
+                  @off-drag="draggable=false"
                   @delete="$emit('delete-document', document.id)" />
       </draggable>
     </div>
@@ -92,7 +92,6 @@ export default {
     },
     onDragEnd() {
       this.isDragging = false;
-      this.draggable = false;
     },
     onMoveDocument(evt) {
       const documentId = parseInt(evt.item.getAttribute('data-document-id'));
