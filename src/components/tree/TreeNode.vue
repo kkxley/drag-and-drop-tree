@@ -9,17 +9,13 @@
               @off-drag="$emit('off-drag')"
               :is-open="isOpen" />
     <div class="tree-node__child-group">
-      <draggable group="documents"
-                 ghostClass="document_ghost"
-                 dragClass="document_drag"
-                 :value="category.documents"
-                 :disabled="!draggable"
-                 @start="$emit('on-drag-start', $event)"
-                 @end="$emit('on-drag-end', $event)"
-                 @add="beforeAdd"
-                 @update="$emit('on-move', $event)"
-                 :data-category-id="category.id"
-                 :removeCloneOnHide="false">
+      <DraggableDocuments :is-disable="!draggable"
+                          :category-id="category.id"
+                          :value="category.documents"
+                          @on-drag-start="$emit('on-drag-start', $event)"
+                          @on-drag-end="$emit('on-drag-end', $event)"
+                          @on-add-document="beforeAdd"
+                          @on-move-document="$emit('on-move-document', $event)">
         <template v-if="isOpen">
           <Document v-for="document in category.documents"
                     :key="document.id"
@@ -31,7 +27,7 @@
                     @off-drag="$emit('off-drag')"
                     @delete="$emit('delete-document', document.id)" />
         </template>
-      </draggable>
+      </DraggableDocuments>
     </div>
   </div>
 </template>
@@ -39,11 +35,11 @@
 <script>
 import Category from "@/components/tree/Category";
 import Document from "@/components/tree/Document";
-import draggable from 'vuedraggable';
+import DraggableDocuments from "@/components/tree/DraggableDocuments";
 
 export default {
   name: "TreeNode",
-  components: {Document, Category, draggable},
+  components: {DraggableDocuments, Document, Category},
   props: {
     category: {
       type: Object,
@@ -66,7 +62,7 @@ export default {
   methods: {
     beforeAdd(evt) {
       this.isOpen = true;
-      this.$emit('on-move', evt);
+      this.$emit('on-move-document', evt);
     }
   },
   watch: {

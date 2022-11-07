@@ -14,23 +14,19 @@
                 :draggable="draggable || isDragging"
                 @on-drag-start="onDragStart"
                 @on-drag-end="onDragEnd"
-                @on-move="onMoveDocument"
+                @on-move-document="onMoveDocument"
                 @on-drag="draggable=true"
                 @off-drag="draggable=false"
                 @delete-category="id => $emit('delete-category', id)"
                 @delete-document="id => $emit('delete-document', id)" />
     </draggable>
     <div class="tree__parentless-docs">
-      <draggable group="documents"
-                 ghostClass="document_ghost"
-                 dragClass="document_drag"
-                 :disabled="!draggable && !isDragging"
-                 @start="onDragStart"
-                 @end="onDragEnd"
-                 @add="onMoveDocument"
-                 @update="onMoveDocument"
-                 :value="parentlessDocs"
-                 :removeCloneOnHide="false">
+      <DraggableDocuments :is-disable="!draggable && !isDragging"
+                          :value="parentlessDocs"
+                          @on-drag-start="onDragStart"
+                          @on-drag-end="onDragEnd"
+                          @on-add-document="onMoveDocument"
+                          @on-move-document="onMoveDocument">
         <Document v-for="document in parentlessDocs"
                   :key="document.id"
                   :title="document.title"
@@ -40,7 +36,7 @@
                   @on-drag="draggable=true"
                   @off-drag="draggable=false"
                   @delete="$emit('delete-document', document.id)" />
-      </draggable>
+      </DraggableDocuments>
     </div>
   </div>
 </template>
@@ -49,10 +45,11 @@
 import Document from "@/components/tree/Document";
 import TreeNode from "@/components/tree/TreeNode";
 import draggable from 'vuedraggable';
+import DraggableDocuments from "@/components/tree/DraggableDocuments";
 
 export default {
   name: "Tree",
-  components: {TreeNode, Document, draggable},
+  components: {DraggableDocuments, TreeNode, Document, draggable},
   props: {
     categories: {
       type: Array,
