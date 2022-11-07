@@ -14,8 +14,8 @@
                  dragClass="document_drag"
                  :value="category.documents"
                  :disabled="!draggable"
-                 @start="onStart"
-                 @end="onEnd"
+                 @start="$emit('on-drag-start', $event)"
+                 @end="$emit('on-drag-end', $event)"
                  @add="beforeAdd"
                  @update="isOpen = true"
                  :data-category-id="category.id"
@@ -53,18 +53,6 @@ export default {
       type: Boolean,
       default: false
     },
-    onStart: {
-      type: Function,
-      required: true
-    },
-    onEnd: {
-      type: Function,
-      required: true
-    },
-    onAdd: {
-      type: Function,
-      required: true
-    },
     searchText: {
       type: String,
       default: ''
@@ -78,7 +66,7 @@ export default {
   methods: {
     beforeAdd(evt) {
       this.isOpen = true;
-      this.onAdd(evt);
+      this.$emit('on-add', evt);
     }
   },
   watch: {
